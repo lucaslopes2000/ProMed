@@ -11,11 +11,11 @@ namespace ProMed.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HospitalController : ControllerBase
+    public class HospitaisController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public HospitalController(DataContext context)
+        public HospitaisController(DataContext context)
         {
             _context = context;
             
