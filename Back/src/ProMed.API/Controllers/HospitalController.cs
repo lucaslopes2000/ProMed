@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ProMed.API.Data;
 using ProMed.API.Models;
 
 namespace ProMed.API.Controllers
@@ -12,40 +13,26 @@ namespace ProMed.API.Controllers
     [Route("api/[controller]")]
     public class HospitalController : ControllerBase
     {
-        public IEnumerable<Hospital> _hospital = new Hospital[] {
-            new Hospital() {
-                HospitalId = 1,
-                Nome = "Hospital Pacini",
-                Endereco = "Asa sul, Brasília -DF",
-                QtdLeitos = 20,
-                Especialidades = "Oftalmologia",
-                ImagenURL = "foto1.png"
-            },
-            new Hospital() {
-                HospitalId = 2,
-                Nome = "Hospital Santa Helena",
-                Endereco = "Asa norte, Brasília -DF",
-                QtdLeitos = 100,
-                Especialidades = "Clinico geral",
-                ImagenURL = "foto2.png"
-            }
-        };
+        private readonly DataContext _context;
 
-        public HospitalController()
+        public HospitalController(DataContext context)
         {
+            _context = context;
             
         }
 
         [HttpGet]
         public IEnumerable<Hospital> Get()
         {
-            return _hospital;
+            return _context.Hospitais;
         }
 
         [HttpGet("{id}")]
-        public IEnumerable<Hospital> GetById(int id)
+        public Hospital GetById(int id)
         {
-            return _hospital.Where(hospital => hospital.HospitalId == id);
+            return _context.Hospitais.FirstOrDefault(
+                hospital => hospital.HospitalId == id
+            );
         }
 
         [HttpPost]
