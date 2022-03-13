@@ -1,7 +1,61 @@
-<h1>Hospitais estão ok!</h1>
+<h2>Hospitais</h2>
+<hr>
 
-<div *ngFor="let hospital of hospitais">
-  <p><b>Nome: </b>{{hospital.nome}}</p>
-  <p><b>Endereço: </b>{{hospital.endereco}}</p>
-  <hr>
+<div class="form-inline">
+  <div class="form-group mb-2">
+    <label class="mr-2">Filtro: </label>
+    <input
+      type="text"
+      class="form-control mr-2"
+      placeholder="Buscar"
+      [(ngModel)]="filtroLista"
+    >
+  </div>
 </div>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th>
+        <button type="button" class="btn btn-outline-light btn-sm" (click)="estadoImg()">
+          {{!exibirImg ? "exibir" : "ocultar"}}
+        </button>
+      </th>
+      <th>#</th>
+      <th>Nome</th>
+      <th>Endereço</th>
+      <th>Especialidades</th>
+      <th>Qtd Leitos</th>
+      <th>Opções</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="hospitais && hospitais.length">
+    <tr *ngFor="let hospital of hospitaisFiltrados">
+      <td>
+        <img
+          [collapse]="!exibirImg" [isAnimated]="true"
+          src="/assets/{{hospital.imagenURL}}"
+          alt=""
+          [style.width.px]="widthImg"
+          [style.margin.px]="marginImg"
+        >
+      </td>
+      <td>{{hospital.hospitalId}}</td>
+      <td>{{hospital.nome}}</td>
+      <td>{{hospital.endereco}}</td>
+      <td>{{hospital.especialidades}}</td>
+      <td>{{hospital.qtdLeitos}}</td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm mr-2">Editar</button>
+        <button type="button" class="btn btn-danger btn-sm">Excluir</button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="!hospitais.length">
+    <tr>
+      <td colspan="8" class="text-center">
+        <h4>Nenhum hospital encontrado!</h4>
+      </td>
+    </tr>
+  </tfoot>
+</table>
