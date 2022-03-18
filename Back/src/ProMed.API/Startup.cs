@@ -12,7 +12,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using ProMed.API.Data;
+using ProMed.Application;
+using ProMed.Application.Contratos;
+using ProMed.Persistence;
+using ProMed.Persistence.Contextos;
+using ProMed.Persistence.Contratos;
 
 namespace ProMed.API
 {
@@ -28,10 +32,16 @@ namespace ProMed.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(
+            services.AddDbContext<ProMedContext>(
                 context => context.UseSqlite(Configuration.GetConnectionString("Default"))
             );
-            services.AddControllers();
+            services.AddControllers()
+                    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddScoped<IHospitalService, HospitalService>();
+            services.AddScoped<IGeralPersist, GeralPersist>();
+            services.AddScoped<IHospitalPersist, HospitalPersist>();
+
             services.AddCors();
             services.AddSwaggerGen(c =>
             {
